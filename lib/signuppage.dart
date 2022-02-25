@@ -1,8 +1,8 @@
 import 'dart:convert';
-import 'package:bloody_head/signuppage2.dart';
+import './signuppage2.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import './Toast.dart' as Toast;
+import 'function/Toast.dart' as Toast;
 
 class SignupPage extends StatefulWidget {
   const SignupPage({Key? key}) : super(key: key);
@@ -13,13 +13,13 @@ class SignupPage extends StatefulWidget {
 
 class _SignupPageState extends State<SignupPage> {
   void reSend() async {
-    String url = 'http://test.divo.kr/auth/register/message/' + phonenumber;
+    String url = 'https://test.divo.kr/auth/register/message/' + phonenumber;
     await http.get(Uri.parse(url));
     Toast.Message("Message Sended");
   }
 
   void checkCert() async {
-    String url = 'http://test.divo.kr/auth/register/message/' + phonenumber;
+    String url = 'https://test.divo.kr/auth/register/message/' + phonenumber;
     http.Response res = await http.post(
       Uri.parse(url),
       body: {'certificateCode': cert},

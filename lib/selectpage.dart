@@ -1,27 +1,45 @@
 import 'dart:convert';
+import './maincontainer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
 class SelectPage extends StatefulWidget {
-  const SelectPage({Key? key, required this.map}) : super(key: key);
+  SelectPage({Key? key, required this.userInfo}) : super(key: key);
 
-  final Map map;
+  final Map userInfo;
 
   @override
-  _SelectPageState createState() => _SelectPageState(map);
+  _SelectPageState createState() => _SelectPageState(userInfo);
 }
 
 class _SelectPageState extends State<SelectPage> {
-  Map props;
-  _SelectPageState(this.props);
+  Map userInfo;
+  _SelectPageState(this.userInfo);
+  void logout() async {
+    const storage = FlutterSecureStorage();
+    storage.delete(key: jsonEncode(userInfo));
+    Navigator.pushReplacementNamed(context, '/login');
+  }
+
+  void gotoMain() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (BuildContext context) =>
+                MainContainer(userInfo: userInfo)));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Select')),
       body: Center(
           child: Column(
-        children: [Text(props['username']), Text(props['token'])],
+        children: [
+          ElevatedButton(onPressed: gotoMain, child: const Text('고메 정식당')),
+          ElevatedButton(onPressed: logout, child: const Text('logout')),
+        ],
       )),
     );
   }

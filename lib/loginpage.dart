@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:webview_flutter/webview_flutter.dart';
 import './selectpage.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,22 +14,30 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String url = 'http://test.divo.kr/auth/login/';
+  String url = 'https://test.divo.kr/auth/login/';
+
+  void initState() {
+    super.initState();
+    // Enable virtual display.
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+  }
 
   void tryLogin() async {
     http.Response res = await http.post(Uri.parse(url), body: <String, String>{
       'email': id,
       'password': pw,
     });
-    print(res.body);
-    Map response = jsonDecode(res.body);
-    if (response['message'] == 'success') {
+    String response = utf8.decode(res.bodyBytes);
+    print('fffffffffffffffffffffffff' + response);
+    Map responsejson = jsonDecode(response);
+    if (responsejson['message'] == 'success') {
       const storage = FlutterSecureStorage();
-      storage.write(key: response['username'], value: 'STATUS_LOGIN');
+      storage.write(key: response, value: 'STATUS_LOGIN');
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-              builder: (BuildContext context) => SelectPage(map: response)));
+              builder: (BuildContext context) =>
+                  SelectPage(userInfo: responsejson)));
     }
   }
 

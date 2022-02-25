@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import './Toast.dart' as Toast;
+import 'function/Toast.dart' as Toast;
 
 class SignupPage2 extends StatefulWidget {
   const SignupPage2({Key? key, required this.pn, required this.ct})
@@ -28,7 +28,7 @@ class _SignupPage2State extends State<SignupPage2> {
   String get pw => _pw.text;
 
   void trySignup() async {
-    String url = 'http://test.divo.kr/auth/register/telephone/';
+    String url = 'https://test.divo.kr/auth/register/telephone/';
     http.Response res = await http.post(Uri.parse(url), body: {
       'certificateCode': ct,
       'phoneNumber': pn,
